@@ -1,0 +1,291 @@
+dis（数字图像防抖）   //支持6个自由度，4个自由度校准参数可配
+Usage : ./sample_dis <index> <intf>                                             
+index:                                                                          
+         0)DIS-4DOF_GME.VI-VO VENC.                                             
+         1)DIS-6DOF_GME.VI-VO VENC.                                             
+intf:                                                                           
+         0) vo HDMI output, default.                                            
+         1) vo BT1120 output. 
+
+fisheye （鱼眼镜头，分区域采集图像）
+Usage : ./sample_dis <index> <intf>                                             
+index:                                                                          
+         0)DIS-4DOF_GME.VI-VO VENC.                                             
+         1)DIS-6DOF_GME.VI-VO VENC.                                             
+intf:                                                                           
+         0) vo HDMI output, default.                                            
+         1) vo BT1120 output. 
+
+
+hifb
+Usage : ./sample_hifb <index> <device> <intf>
+/****************index******************/
+please choose the case which you want to run:
+        0:  ARGB8888 standard mode
+        1:  ARGB1555 BUF_DOUBLE mode
+        2:  ARGB1555 BUF_ONE mode
+        3:  ARGB1555 BUF_NONE mode
+        4:  ARGB1555 BUF_ONE mode with compress
+        5:  ARGB8888 BUF_ONE mode with compress
+/****************device******************/
+         0) VO device 0#, default.
+         1) VO device 1#.
+/****************intf******************/
+         0) VO HDMI output, default.
+         1) VO BT1120 output.
+
+lsc_online_cali
+Usage: ./lsc_online_cali [Pipe] [nbit] [scale] 
+ViDev: 
+   0:Pipe_0 ~~ 5:Pipe_5
+nbit: 
+   The bit num to be dump
+scale: 
+   scale value to be used to calculate gain
+e.g : ./lsc_online_cali  0 12 1
+
+mode_switch
+Usage : ./sample_modeswitch <index> <intf>
+index:
+         0)mode switch wdr to linear   for imx290  VI -  VO - HDMI.      Embeded isp, phychn channel preview.
+         1)mode switch linear to wdr    for imx290  VI - VO - HDMI+BT1120.       Embeded isp, phychn channel preview.
+         2)resolution  9M50FPS  to 8M30FPS   for imx477 VI - VO - HDMI.       Embeded isp, phychn channel preview.
+         3)resolution  8M30FPS  to 9M50FPS  for imx477 VI - VO - HDMI.     Embeded isp, phychn channel preview.
+intf:
+         0) vo HDMI output, default.
+         1) vo BT1120 output.
+error essmage
+ 1  maybe config error
+[SAMPLE_COMM_VI_SetMipiAttr]-1636: ============= MipiDev 0, SetMipiAttr enWDRMode: 6
+[Func]:cmos_set_wdr_mode [Line]:1068 [Info]:NOT support this mode!
+[Func]:HI_MPI_ISP_Init [Line]:542 [Info]:ISP[0] set sensor WDR mode failed!
+[SAMPLE_COMM_VI_StartIsp]-2917: ISP Init failed with 0xa01c8040!
+[SAMPLE_COMM_VI_CreateIsp]-2994: SAMPLE_COMM_VI_StartIsp failed !
+[SAMPLE_COMM_VI_StartVi]-3076: SAMPLE_COMM_VI_CreateIsp failed!
+[SAMPLE_VIO_IMX290_WDR_TO_LINEAR]-227: SAMPLE_COMM_VI_StartVi failed with -1!
+[SAMPLE_COMM_VI_StopViChn]-2487: HI_MPI_VI_DisableChn failed with 0xa0108005!
+[SAMPLE_COMM_VI_StopSingleViPipe]-2177: HI_MPI_VI_StopPipe failed with 0xa0108005!
+[SAMPLE_COMM_VI_StopSingleViPipe]-2177: HI_MPI_VI_StopPipe failed with 0xa0108005!
+[SAMPLE_COMM_VI_StopSingleViPipe]-2177: HI_MPI_VI_StopPipe failed with 0xa0108005!
+[main]-1173: program exit abnormally!
+2  maybe frame rate error
+[SAMPLE_COMM_VI_SetMipiAttr]-1636: ============= MipiDev 0, SetMipiAttr enWDRMode: 0
+[Func]:cmos_set_wdr_mode [Line]:1057 [Info]:linear mode
+===Imx334 8M30fps 12bit LINE Init OK!===
+[SAMPLE_COMM_ISP_Thread]-305: ISP Dev 0 running !
+[SAMPLE_COMM_VO_StartChn]-544: u32Width:1920, u32Height:1080, u32Square:1
+---------------press Enter key to exit!---------------
+
+
+pciv
+/mnt/mpp/sample/pciv # ./sample_pciv_host
+press sample command as follows!
+         1) (YUV)VI->VPSS->PCIV(slave)->PCIV(host)->VPSS->VO(HD)+ (STREAM)VI->PCIT(Slave)->PCIT(Host)->File
+         2) (YUV)VDEC->VPSS->PCIV(slave)->PCIV(host)->VPSS->VO(HD)
+         3) (YUV)VB->PCIV(slave)->PCIV(host)->DDR(HD)
+         4) file->PCIV(host)->PCIV(slave)->VDEC->PCIV(slave)->PCIV(host)->VPSS->VO
+         5) (COMPRESS)(YUV)VI->VPSS->PCIV(slave)->PCIV(host)->VPSS->VO(HD)+ (STREAM)VI->PCIT(Slave)->PCIT(Host)->File
+         6) (COMPRESS)file->PCIV(host)->PCIV(slave)->VDEC->PCIV(slave)->PCIV(host)->VPSS->VO
+error message  dual-system
+open mcc dev fail
+Sample Pciv err:ffffffff,Func:SampleInitPcie,Line:2586
+Sample Pciv err:ffffffff,Func:SampleViVpssSlaveSendCompressPicToHostVpssVoDisplayMode,Line:3346
+Sample Pciv err:ffffffff,Func:main,Line:3995
+
+sensor_auto
+This scene sample can only be run when vi-isp is running;
+Diffierent sensor have diffierent config and diffierent mainapp.
+use ini2source can generate part of source of scene from inicfg file
+(Attention: We have already generate file. So you don't need to do it again!!!!)
+go to out/sensor_bin/sensor_XXX/, then execute the mainapp
+Currently:
+Sensor imx290, we have create linear and wdr mode sample.
+When you start a linear mode in Vi Pipe 0, you execute the mainapp, and in the app then input 0;
+When you start a wdr mode in Vi pipe 0 and 1, you can execute the mainapp, and in the app then input 1;
+Sensor imx334 and 334avs_4ch, only have linear mode sample.
+Just start the corresponding media route, and execute the mainapp, and in the app then input 0.
+
+snap
+jpg image is locked,can't open
+Usage : ./sample_snap <index> 
+index:
+         0)double pipe offline, normal snap.
+
+svp
+1  /mnt/mpp/sample/svp/multi-core/dsp # ./sample_dsp_main
+frame rate error
+[SAMPLE_COMM_VI_SetMipiAttr]-1636: ============= MipiDev 0, SetMipiAttr enWDRMode: 0
+[Func]:cmos_set_wdr_mode [Line]:1057 [Info]:linear mode
+===Imx334 8M30fps 12bit LINE Init OK!===
+[SAMPLE_COMM_ISP_Thread]-305: ISP Dev 0 running !
+[SAMPLE_COMM_VO_StartChn]-544: u32Width:1920, u32Height:1080, u32Square:1
+---------------press Enter key to exit!---------------
+
+2  /mnt/mpp/sample/svp/multi-core/ive # ./sample_ive_main
+Usage : ./sample_ive_main <index> [complete] [encode] [vo]
+index:
+         0)BgModel,<encode>:0, not encode;1,encode.<vo>:0,not call vo;1,call vo.(VI->VPSS->IVE->VGS->[VENC_H264]->[VO_HDMI]).
+         1)Gmm,<encode>:0, not encode;1,encode.<vo>:0,not call vo;1,call vo.(VI->VPSS->IVE->VGS->[VENC_H264]->[VO_HDMI]).
+         2)Occlusion detected.(VI->VPSS->IVE->VO_HDMI).
+         3)Motion detected.(VI->VPSS->IVE->VGS->VO_HDMI).
+         4)Canny,<complete>:0, part canny;1,complete canny.(FILE->IVE->FILE).
+         5)Gmm2.(FILE->IVE->FILE).
+         6)MemoryTest.(FILE->IVE->FILE).
+         7)Sobel.(FILE->IVE->FILE).
+         8)Ann.(FILE->IVE->STDIO).
+         9)St Lk.(FILE->IVE->FILE).
+         a)Svm.(FILE->IVE->STDIO).
+         b)Cnn.(FILE->IVE->STDIO).
+3  /mnt/mpp/sample/svp/multi-core/ive # ./sample_ive_main
+Usage : ./sample_ive_main <index> [complete] [encode] [vo]
+index:
+         0)BgModel,<encode>:0, not encode;1,encode.<vo>:0,not call vo;1,call vo.(VI->VPSS->IVE->VGS->[VENC_H264]->[VO_HDMI]).
+         1)Gmm,<encode>:0, not encode;1,encode.<vo>:0,not call vo;1,call vo.(VI->VPSS->IVE->VGS->[VENC_H264]->[VO_HDMI]).
+         2)Occlusion detected.(VI->VPSS->IVE->VO_HDMI).
+         3)Motion detected.(VI->VPSS->IVE->VGS->VO_HDMI).
+         4)Canny,<complete>:0, part canny;1,complete canny.(FILE->IVE->FILE).
+         5)Gmm2.(FILE->IVE->FILE).
+         6)MemoryTest.(FILE->IVE->FILE).
+         7)Sobel.(FILE->IVE->FILE).
+         8)Ann.(FILE->IVE->STDIO).
+         9)St Lk.(FILE->IVE->FILE).
+         a)Svm.(FILE->IVE->STDIO).
+         b)Cnn.(FILE->IVE->STDIO).
+
+
+tde
+/mnt/mpp/sample/tde # ./sample_tde
+Usage : ./sample_tde <intf>
+intf:
+         0) vo VGA output, default.
+         1) vo HDMI output.
+
+traffic_capture
+error: saved image is locked,can't open
+/mnt/mpp/sample/traffic_capture # ./sample_traffic_capture
+Usage : ./sample_traffic_capture <index> 
+index:
+         0)sample of traffic picture capture .
+
+vedc
+error ;frame rate error
+/mnt/mpp/sample/vdec # ./sample_vdec
+
+Invaild input!  For examples:
+
+/************************************/
+Usage : ./sample_vdec <index> <IntfSync >
+index:
+        0:  VDEC(H265)-VPSS-VO
+        1:  VDEC(H264)-VPSS-VO
+        2:  VDEC(JPEG->YUV)-VPSS-VO
+        3:  VDEC(JPEG->RGB)
+        4:  VDEC(H264)->VPSS-VO(DHD0-hdmi,DHD1-mipi_tx)
+
+IntfSync :
+        0: VO HDMI 4K@30fps.
+        1: VO HDMI 1080P@30fps.
+/************************************/
+
+output message
+[SAMPLE_COMM_VO_StartChn]-544: u32Width:1920, u32Height:1080, u32Square:1
+[SAMPLE_COMM_VO_StartChn]-544: u32Width:1080, u32Height:1920, u32Square:1
+[SAMPLE_PRIVATE_VO_InitMipiTxScreen]-3911: SAMPLE_PRIVATE_VO_InitMipiTxScreen,3911,Init 1080p screen.
+
+SAMPLE_TEST:press 'e' to exit; 'p' to pause; 'r' to resume; 'q' to query!
+
+  chn 0, stream file:3840x2160_8bit.h264, userbufsize: 12441600 
+q
+ ---------------------------------------------------------------------------------------------------
+ chn:0, Type:96, bStart:1, DecodeFrames:9053, LeftPics:0, LeftBytes:9286864, LeftFrames:66, RecvFrames:9121  
+ FormatErr:0,    s32PicSizeErrSet:0,  s32StreamUnsprt:0,  s32PackErr:0,  u32PrtclNumErrSet:0,  s32RefErrSet:0,  s32PicBufSizeErrSet:0  
+
+venc
+output file is locked,can't open
+/mnt/mpp/sample/venc # ./sample_venc
+Usage : ./sample_venc [index] 
+index:
+          0) H.265e@4K@120fps + H264e@1080p@30fps.
+          1) H.265e@4K@60fps + H264e@4K@60fp.
+          2) Lowdelay:H.265e@4K@30fps.
+          3) IntraRefresh:H.265e@4K@60fps + H264e@4K@60fps.
+          4) Qpmap:H.265e@4K + H264e@4K@60fps.
+          5) Mjpeg@4K@60fps +Jpeg@4K.
+
+vgs
+/mnt/mpp/sample/vgs # ./sample_vgs
+Usage : ./sample_vgs <index> <intf>
+index:
+         0) SDR10 COMPRESS, VI - VGS - VO - HDMI. 
+intf:
+         0) vo HDMI output, default.
+         1) vo BT1120 output.
+
+voi
+/mnt/mpp/sample/vio # ./sample_vio
+Usage : ./sample_vio <index> <intf>
+index:
+         0)parallel SDR8     VI - VPSS - VO - HDMI.      Embeded isp, phychn channel preview.
+         1)online   SDR8     VI - VPSS - VO - HDMI.      2 pipe, Embeded isp, phychn channel preview.
+         2)offline  SDR8     VI - VPSS - VO - HDMI.      4 pipe, Embeded isp, phychn channel preview.
+         3)online   WDR      VI - VPSS - VO - HDMI.      Embeded isp, phychn channel preview.
+         4)online   SDR8     VI - VO - HDMI.             Embeded isp, LDC+ROTATE.
+         5)online   SDR8     VI - VO - HDMI.             Embeded isp, FreeRotation.
+         6)online   SDR8     VI - VO - HDMI.             Embeded isp, LDC+SPREAD.
+         7)online   SDR8     VI - VO - HDMI.             Embeded isp, dump raw, phychn channel preview.
+intf:
+         0) vo HDMI output, default.
+         1) vo BT1120 output.
+0 0
+error:maybe frame rate error
+[SAMPLE_COMM_VI_SetMipiAttr]-1636: ============= MipiDev 0, SetMipiAttr enWDRMode: 0
+[Func]:cmos_set_wdr_mode [Line]:1057 [Info]:linear mode
+===Imx334 8M30fps 12bit LINE Init OK!===
+[SAMPLE_COMM_ISP_Thread]-305: ISP Dev 0 running !
+[SAMPLE_COMM_VO_StartChn]-544: u32Width:3840, u32Height:2160, u32Square:1
+---------------press Enter key to exit!---------------
+1 0
+error: /mnt/mpp/sample/vio # ./sample_vio 1 0
+[SAMPLE_COMM_VI_SetMipiAttr]-1636: ============= MipiDev 0, SetMipiAttr enWDRMode: 0
+[SAMPLE_COMM_VI_SetMipiAttr]-1636: =========devno:4 lane_id[0] 0 is invalid in hs_mode 7
+==== MipiDev 4, SetMipiAttr enWD
+RMode: 0
+mipi_set_mipi_dev_attr(721): devno[4], get_lane_info failed
+
+[SAMPLE_COMM_VI_SetMipiAttr]-1642: MIPI_SET_DEV_ATTR failed
+[SAMPLE_COMM_VI_StartMIPI]-1713: SAMPLE_COMM_VI_SetMipiAttr failed!
+[SAMPLE_COMM_VI_StartVi]-3051: SAMPLE_COMM_VI_StartMIPI failed!
+[SAMPLE_VIO_2X4K60_TotalOnline]-440: SAMPLE_COMM_VI_StartVi failed with -1!
+[SAMPLE_COMM_VI_StopSingleViPipe]-2177: HI_MPI_VI_StopPipe failed with 0xa0108005!
+[SAMPLE_COMM_VI_StopSingleViPipe]-2177: HI_MPI_VI_StopPipe failed with 0xa0108005!
+
+2 0
+error: /mnt/mpp/sample/vio # ./sample_vio 2 0
+[SAMPLE_COMM_VI_SetMipiAttr]-1636: ============= MipiDev 0, SetMipiAttr enWDRMode: 0
+[SAMPLE_COMM_VI_SetMipiAttr]-1636: =========devno:2 lane_id[0] 0 is invalid in hs_mode 7
+==== MipiDev 2, SetMipiAttr enWD
+RMode: 0
+mipi_set_mipi_dev_attr(721): devno[2], get_lane_info failed
+
+[SAMPLE_COMM_VI_SetMipiAttr]-1642: MIPI_SET_DEV_ATTR failed
+[SAMPLE_COMM_VI_StartMIPI]-1713: SAMPLE_COMM_VI_SetMipiAttr failed!
+[SAMPLE_COMM_VI_StartVi]-3051: SAMPLE_COMM_VI_StartMIPI failed!
+[SAMPLE_VIO_4x4K30_WBC]-726: SAMPLE_COMM_VI_StartVi failed with -1!
+[SAMPLE_COMM_VI_StopSingleViPipe]-2177: HI_MPI_VI_StopPipe failed with 0xa0108005!
+[SAMPLE_COMM_VI_StopSingleViPipe]-2177: HI_MPI_VI_StopPipe failed with 0xa0108005!
+[SAMPLE_COMM_VI_StopSingleViPipe]-2177: HI_MPI_VI_StopPipe failed with 0xa0108005!
+[SAMPLE_COMM_VI_StopSingleViPipe]-2177: HI_MPI_VI_StopPipe failed with 0xa0108005!
+
+3 0
+error:: maybe frame rate error
+[SAMPLE_COMM_VI_SetMipiAttr]-1636: ============= MipiDev 0, SetMipiAttr enWDRMode: 3
+[Func]:cmos_set_wdr_mode [Line]:1064 [Info]:2to1 line WDR 4k mode(60fps->30fps)
+===Imx334 8M30fps 12bit DOL 2t1 Init OK!===
+[SAMPLE_COMM_ISP_Thread]-305: ISP Dev 0 running !
+[SAMPLE_COMM_VO_StartChn]-544: u32Width:3840, u32Height:2160, u32Square:1
+---------------press Enter key to exit!---------------
+ 4 5 6 7 is successful
+
+
+
+
