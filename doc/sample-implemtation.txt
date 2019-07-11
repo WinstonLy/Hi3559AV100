@@ -7,14 +7,8 @@ intf:
          0) vo HDMI output, default.                                            
          1) vo BT1120 output. 
 
-fisheye （鱼眼镜头，分区域采集图像）
-Usage : ./sample_dis <index> <intf>                                             
-index:                                                                          
-         0)DIS-4DOF_GME.VI-VO VENC.                                             
-         1)DIS-6DOF_GME.VI-VO VENC.                                             
-intf:                                                                           
-         0) vo HDMI output, default.                                            
-         1) vo BT1120 output. 
+fisheye （鱼眼镜头，分区域采集图像，并有不同状态下的显示效果）
+ 
 
 
 hifb
@@ -44,7 +38,7 @@ scale:
    scale value to be used to calculate gain
 e.g : ./lsc_online_cali  0 12 1
 
-mode_switch
+mode_switch（不同的摄像头工作模式转换）
 Usage : ./sample_modeswitch <index> <intf>
 index:
          0)mode switch wdr to linear   for imx290  VI -  VO - HDMI.      Embeded isp, phychn channel preview.
@@ -54,7 +48,7 @@ index:
 intf:
          0) vo HDMI output, default.
          1) vo BT1120 output.
-error essmage
+error essmage（可能是由于摄像头本身参数的原因，我们采用的是imx334）
  1  maybe config error
 [SAMPLE_COMM_VI_SetMipiAttr]-1636: ============= MipiDev 0, SetMipiAttr enWDRMode: 6
 [Func]:cmos_set_wdr_mode [Line]:1068 [Info]:NOT support this mode!
@@ -105,13 +99,13 @@ When you start a wdr mode in Vi pipe 0 and 1, you can execute the mainapp, and i
 Sensor imx334 and 334avs_4ch, only have linear mode sample.
 Just start the corresponding media route, and execute the mainapp, and in the app then input 0.
 
-snap
-jpg image is locked,can't open
+snap（离线抓取图片并保存到本地文件）
+jpg image is locked,can't open   //权限不够的原因 用sudo chown 用户名 文件夹名/ -R可以解决这个问题
 Usage : ./sample_snap <index> 
 index:
          0)double pipe offline, normal snap.
 
-svp
+svp（对图像进行智能处理）
 1  /mnt/mpp/sample/svp/multi-core/dsp # ./sample_dsp_main
 frame rate error
 [SAMPLE_COMM_VI_SetMipiAttr]-1636: ============= MipiDev 0, SetMipiAttr enWDRMode: 0
@@ -136,7 +130,7 @@ index:
          9)St Lk.(FILE->IVE->FILE).
          a)Svm.(FILE->IVE->STDIO).
          b)Cnn.(FILE->IVE->STDIO).
-3  /mnt/mpp/sample/svp/multi-core/ive # ./sample_ive_main
+3  /mnt/mpp/sample/svp/multi-core/ive # ./sample_ive_main   //进行图像的一些处理，如canny算子，sobel算子检测，ann，svm，cnn训练，光流，运动检测等功能
 Usage : ./sample_ive_main <index> [complete] [encode] [vo]
 index:
          0)BgModel,<encode>:0, not encode;1,encode.<vo>:0,not call vo;1,call vo.(VI->VPSS->IVE->VGS->[VENC_H264]->[VO_HDMI]).
@@ -160,19 +154,16 @@ intf:
          0) vo VGA output, default.
          1) vo HDMI output.
 
-traffic_capture
+traffic_capture     //本应用于交通方面的动态目标检测，并保存到本地
 error: saved image is locked,can't open
 /mnt/mpp/sample/traffic_capture # ./sample_traffic_capture
 Usage : ./sample_traffic_capture <index> 
 index:
          0)sample of traffic picture capture .
 
-vedc
+vedc       //对输入图像进行不同格式的编码然后输出
 error ;frame rate error
 /mnt/mpp/sample/vdec # ./sample_vdec
-
-Invaild input!  For examples:
-
 /************************************/
 Usage : ./sample_vdec <index> <IntfSync >
 index:
@@ -200,7 +191,7 @@ q
  chn:0, Type:96, bStart:1, DecodeFrames:9053, LeftPics:0, LeftBytes:9286864, LeftFrames:66, RecvFrames:9121  
  FormatErr:0,    s32PicSizeErrSet:0,  s32StreamUnsprt:0,  s32PackErr:0,  u32PrtclNumErrSet:0,  s32RefErrSet:0,  s32PicBufSizeErrSet:0  
 
-venc
+venc 
 output file is locked,can't open
 /mnt/mpp/sample/venc # ./sample_venc
 Usage : ./sample_venc [index] 
@@ -221,7 +212,7 @@ intf:
          0) vo HDMI output, default.
          1) vo BT1120 output.
 
-voi
+voi   //视频实时地输入输出
 /mnt/mpp/sample/vio # ./sample_vio
 Usage : ./sample_vio <index> <intf>
 index:
