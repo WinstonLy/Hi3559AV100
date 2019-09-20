@@ -10,11 +10,11 @@
 
 ### 二 遇到的问题
 
-- LVDS接口设置
+#### 2.1 LVDS接口设置
 
-  根据imx327的数据手册，输出通过I2C协议，输出接口的切换通过OMODE pin 设置，输出模式的接口设置寄存器通过OPORTSEL设置。具体设置如下：
+根据imx327的数据手册，输出通过I2C协议，输出接口的切换通过OMODE pin 设置，输出模式的接口设置寄存器通过OPORTSEL设置。具体设置如下：
 
-  接口切换
+接口切换
 
 ![Interface Switching](/home/winston/workspace/Hi3559AV100/image/Interface Switching.png)
 
@@ -22,20 +22,119 @@
 
 ![Output Register](/home/winston/workspace/Hi3559AV100/image/OutputRegister.png)                    
 
-- Chip ID怎么选择？
+#### 2.2 Chip ID怎么选择？
 
-  阅读数据手册中的Setting Register Using Serial Communication ，通过I2C写寄存器，具体怎么实现？
+阅读数据手册中的Setting Register Using Serial Communication ，通过I2C写寄存器，具体怎么实现？
 
-  通过设置相应的寄存器值选择chip id，例如：当为写寄存器的时候，寄存器Chip ID = 02h，读寄存器的时候，寄存器Chip ID =82h，其他的也有相应的对应值。根据寄存器映射指定地址。使用通信方法时指定连续地址，地址自动递增先前发送的地址。
+通过设置相应的寄存器值选择chip id，例如：当为写寄存器的时候，寄存器Chip ID = 02h，读寄存器的时候，寄存器Chip ID =82h，其他的也有相应的对应值。根据寄存器映射指定地址。使用通信方法时指定连续地址，地址自动递增先前发送的地址。
 
-- 在将改过的驱动加入到Hi3559AV的SDK中的时候出现`loading out-of-tree module taints kernel`的问题。
+#### 2.3 在将改过的驱动加入到Hi3559AV的SDK中的时候出现`loading out-of-tree module taints kernel`的问题。
 
-  在网上查阅相关问题，定位的问题可能是出现kernel不匹配的造成文件开发板上的系统读取文件出现了权限问题。我将重新编译的boot，kernel，文件系统重新烧写进开发板，成功的解决了上述问题。
+在网上查阅相关问题，定位的问题可能是出现kernel不匹配的造成文件开发板上的系统读取文件出现了权限问题。我将重新编译的boot，kernel，文件系统重新烧写进开发板，成功的解决了上述问题。
 
-  另外在烧写的时候利用最新版本的Hitool工具烧写的时候可能遇到TFTP超时的问题，解决办法是在确认ip配置正确的前提下，修改烧写工具的TFTP属性设置，同时关闭防火墙。
+另外在烧写的时候利用最新版本的Hitool工具烧写的时候可能遇到TFTP超时的问题，解决办法是在确认ip配置正确的前提下，修改烧写工具的TFTP属性设置，同时关闭防火墙。
 
-- 运行例程的时候出现了如下所示的问题
+#### 2.4 管脚的设置
 
-![](/home/winston/workspace/Hi3559AV100/image/寄存器问题.png)
+- OMODE pin ，选择CSI-2或者LVDS
+- XMASTER pin，设置为High处于Slave Mode，设置为Low处于Master Mode
 
-​	初步判断是在驱动文件中的相应寄存器读写设置出现了问题，正在通过阅读imx327的数据手册进行修改。
+> 
+
+#### 2.6 运行例程的时候出现了如下所示的问题
+
+```shell
+/mnt/mpp/sample/vio # ./sample_vio 0 0
+[SAMPLE_COMM_VI_SetMipiAttr]-1964: ============= MipiDev 0, SetMipiAttr enWDRMode: 0
+linear mode
+[Func]:DrcCheckCmosParam hibvt-i2c 12110000.i2c: wait idle abort!, RIS: 0x611
+[Line]:2450 [Info]:Invalid u16AutoStrength!
+[Func]:DemosaicCheckhibvt-i2c 12110000.i2c: wait idle abort!, RIS: 0x611
+CmosParam [Line]:408 [Info]:Invalid au8NonDirMFDetailEhcStr[0]:48hibvt-i2c 12110000.i2c: wait idle abort!, RIS: 0x611
+!
+[Func]:imx327_write_register [Line]:162 [Info]:I2C_WRITE errorhibvt-i2c 12110000.i2c: wait idle abort!, RIS: 0x611
+!
+[Func]:imx327_write_register [Line]:162 [Info]:I2C_WRITE errorhibvt-i2c 12110000.i2c: wait idle abort!, RIS: 0x611
+!
+[Func]:imx327_write_register [Line]:162 [Info]:I2C_WRITE errorhibvt-i2c 12110000.i2c: wait idle abort!, RIS: 0x611
+!
+[Func]:imx327_write_register [Line]:162 [Info]:I2C_WRITE errorhibvt-i2c 12110000.i2c: wait idle abort!, RIS: 0x611
+!
+[Func]:imx327_write_register [Line]:162 [Info]:I2C_WRITE errorhibvt-i2c 12110000.i2c: wait idle abort!, RIS: 0x611
+!
+[Func]:imx327_write_register [Line]:162 [Info]:I2C_WRITE errorhibvt-i2c 12110000.i2c: wait idle abort!, RIS: 0x611
+!
+[Func]:imx327_write_register [Line]:162 [Info]:I2C_WRITE errorhibvt-i2c 12110000.i2c: wait idle abort!, RIS: 0x611
+!
+[Func]:imx327_write_register [Line]:162 [Info]:I2C_WRITE errorhibvt-i2c 12110000.i2c: wait idle abort!, RIS: 0x611
+!
+[Func]:imx327_write_register [Line]:162 [Info]:I2C_WRITE errorhibvt-i2c 12110000.i2c: wait idle abort!, RIS: 0x611
+!
+[Func]:imx327_write_register [Line]:162 [Info]:I2C_WRITE errorhibvt-i2c 12110000.i2c: wait idle abort!, RIS: 0x611
+!
+[Func]:imx327_write_register [Line]:162 [Info]:I2C_WRITE errorhibvt-i2c 12110000.i2c: wait idle abort!, RIS: 0x611
+!
+[Func]:imx327_write_register [Line]:162 [Info]:I2C_WRITE errorhibvt-i2c 12110000.i2c: wait idle abort!, RIS: 0x611
+!
+[Func]:imx327_write_register [Line]:162 [Info]:I2C_WRITE errorhibvt-i2c 12110000.i2c: wait idle abort!, RIS: 0x611
+!
+[Func]:imx327_write_register [Line]:162 [Info]:I2C_WRITE errorhibvt-i2c 12110000.i2c: wait idle abort!, RIS: 0x611
+!
+[Func]:imx327_write_register [Line]:162 [Info]:I2C_WRITE errorhibvt-i2c 12110000.i2c: wait idle abort!, RIS: 0x611
+!
+[Func]:imx327_write_register [Line]:162 [Info]:I2C_WRITE errorhibvt-i2c 12110000.i2c: wait idle abort!, RIS: 0x611
+!
+[Func]:imx327_write_register [Line]:162 [Info]:I2C_WRITE errorhibvt-i2c 12110000.i2c: wait idle abort!, RIS: 0x611
+!
+[Func]:imx327_write_register [Line]:162 [Info]:I2C_WRITE errorhibvt-i2c 12110000.i2c: wait idle abort!, RIS: 0x611
+!
+[Func]:imx327_write_register [Line]:162 [Info]:I2C_WRITE errorhibvt-i2c 12110000.i2c: wait idle abort!, RIS: 0x611
+!
+[Func]:imx327_write_register [Line]:162 [Info]:I2C_WRITE errorhibvt-i2c 12110000.i2c: wait idle abort!, RIS: 0x611
+!
+[Func]:imx327_write_register [Line]:162 [Info]:I2C_WRITE errorhibvt-i2c 12110000.i2c: wait idle abort!, RIS: 0x611
+!
+[Func]:imx327_write_register [Line]:162 [Info]:I2C_WRITE errorhibvt-i2c 12110000.i2c: wait idle abort!, RIS: 0x611
+!
+[Func]:imx327_write_register [Line]:162 [Info]:I2C_WRITE errorhibvt-i2c 12110000.i2c: wait idle abort!, RIS: 0x611
+!
+[Func]:imx327_write_register [Line]:162 [Info]:I2C_WRITE errorhibvt-i2c 12110000.i2c: wait idle abort!, RIS: 0x611
+!
+[Func]:imx327_write_register [Line]:162 [Info]:I2C_WRITE errorhibvt-i2c 12110000.i2c: wait idle abort!, RIS: 0x611
+!
+[Func]:imx327_write_register [Line]:162 [Info]:I2C_WRITE errorhibvt-i2c 12110000.i2c: wait idle abort!, RIS: 0x611
+!
+[Func]:imx327_write_register [Line]:162 [Info]:I2C_WRITE errorhibvt-i2c 12110000.i2c: wait idle abort!, RIS: 0x611
+!
+[Func]:imx327_write_register [Line]:162 [Info]:I2C_WRITE errorhibvt-i2c 12110000.i2c: wait idle abort!, RIS: 0x611
+!
+[Func]:imx327_write_register [Line]:162 [Info]:I2C_WRITE errorhibvt-i2c 12110000.i2c: wait idle abort!, RIS: 0x611
+!
+[Func]:imx327_write_register [Line]:162 [Info]:I2C_WRITE errorhibvt-i2c 12110000.i2c: wait idle abort!, RIS: 0x611
+!
+[Func]:imx327_write_register [Line]:162 [Info]:I2C_WRITE errorhibvt-i2c 12110000.i2c: wait idle abort!, RIS: 0x611
+!
+[Func]:imx327_write_register [Line]:162 [Info]:I2C_WRITE errorhibvt-i2c 12110000.i2c: wait idle abort!, RIS: 0x611
+!
+[Func]:imx327_write_register [Line]:162 [Info]:I2C_WRITE errorhibvt-i2c 12110000.i2c: wait idle abort!, RIS: 0x611
+!
+[Func]:imx327_write_register [Line]:162 [Info]:I2C_WRITE errorhibvt-i2c 12110000.i2c: wait idle abort!, RIS: 0x611
+!
+[Func]:imx327_write_register [Line]:162 [Info]:I2C_WRITE errorhibvt-i2c 12110000.i2c: wait idle abort!, RIS: 0x611
+!
+[Func]:imx327_write_register [Line]:162 [Info]:I2C_WRITE error!
+[Func]:imx327_write_register [Line]:162 [Info]:I2C_WRITE error!
+[Func]:imx327_write_register [Line]:162 [Info]:I2C_WRITE error!
+hibvt-i2c 12110000.i2c: wait idle abort!, RIS: 0x611
+[Func]:imx327_write_register [Line]:162 [Info]:I2C_WRITE error!
+hibvt-i2c 12110000.i2c: wait idle abort!, RIS: 0x611
+[Func]:imx327_write_register [Line]:162 [Info]:I2C_WRITE error!
+===IMX327 1080P 30fps 12bit LINE Init OK!===
+[SAMPLE_COMM_ISP_Thread]-322: ISP Dev 0 running !
+[SAMPLE_COMM_VO_StartChn]-544: u32Width:3840, u32Height:2160, u32Square:1
+---------------press Enter key to exit!---------------
+
+
+```
+
+1. 
