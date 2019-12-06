@@ -32,13 +32,28 @@
 
 - 配置编译环境
 
+  方法一：
+
+  - `osdrv`顶层目录下执行：
+
+    `make BOOT_MEDIA=spi AMP_TYPE=linux hiboot`(`BOOT_MEDIA,AMP_TYPE`根据需要进行传参)
+
+  - 发布包默认支持`DMEB`板，如需生成其他单板`uboot`镜像，请将对应表格文件`xxx.xlsm`拷贝至`osdrv/tools/pc/uboot_tools`目录，并在编译时传参`REGBIN_XLSM=xxx.xlsm`,如下：
+
+     `make BOOT_MEDIA=spi AMP_TYPE=linux REGBIN_XLSM=xxx.xlsm hiboot`
+
+  - 生成的u-boot镜像在pub目录下
+
+  方法二：
+
+   待进入boot源代码目录后，执行以下操作：
+
   - 当启动介质是 `SPI-Nor Flash` 或 `SPI-NAND Flash `时，使用配置命令：
 
     `make CROSS_COMPILE=aarch64-himix100-linux- hi3559av100_defconfig `
 
   - 当启动介质是并口` NAND Flash `时，使用配置命令：
     `make CROSS_COMPILE=aarch64-himix100-linux- hi3559av100_nand_defconfig `
-
   - 当启动介质是 `eMMC `时，使用配置命令：
     `make CROSS_COMPILE=aarch64-himix100-linux- hi3559av100_emmc_defconfig `
 
@@ -68,7 +83,7 @@
 
   `make CROSSCOMPILE=aarch64-himix100-linux- u-boot-z.bin `
 
-生成的` u-boot-hi3559av100.bin` 就是能够在单板上运行的` u-boot `镜像。
+`opensource/uboot/u-boot-2016.11`下生成的`u-boot-hi3559av100.bin`即为可用的`u-boot`镜像
 
 #### 2.5 `hiregbin`工具使用
 
@@ -96,10 +111,10 @@
 
   ```shell
   hisilicon# mw.b 0x42000000 ff 0x100000 				/* 对内存初始化*/ 
-  hisilicon# tftp 0x42000000 u-boot-hi3559av100.bin 	/*U-boot下载到内存*/ 
-  hisilicon# sf probe 0 								/*探测并初始化SPI-Nor flash*/ 
+  hisilicon# tftp 0x42000000 u-boot-hi3559av100.bin 	 /*U-boot下载到内存*/ 
+  hisilicon# sf probe 0 							   /*探测并初始化SPI-Nor flash*/ 
   hisilicon# sf erase 0x0 0x100000					/*擦除 1M大小*/ 
-  hisilicon# sf write 0x42000000 0x0 0x100000 		/*从内存写入SPI-Nor Flash*/ 
+  hisilicon# sf write 0x42000000 0x0 0x100000 		 /*从内存写入SPI-Nor Flash*/ 
   ```
 
   上述步骤操作完成后，重启系统可以看到 U-boot 烧写成功。
@@ -110,9 +125,9 @@
 
   ```shell
   hisilicon# nand erase 0 0x100000 					/*擦除 1M大小*/ 
-  hisilicon# mw.b 0x42000000 0xff 0x100000 			/* 对内存初始化*/ 
-  hisilicon# tftp 0x42000000 u-boot-hi3559av100.bin   /*U-boot下载到内存*/ 
-  hisilicon# nand write 0x42000000 0 0x100000 		/*从内存写入NAND Flash*/ 
+  hisilicon# mw.b 0x42000000 0xff 0x100000 			 /* 对内存初始化*/ 
+  hisilicon# tftp 0x42000000 u-boot-hi3559av100.bin     /*U-boot下载到内存*/ 
+  hisilicon# nand write 0x42000000 0 0x100000 		 /*从内存写入NAND Flash*/ 
   ```
 
   重启系统可以看到 U-boot 烧写成功。
@@ -123,7 +138,7 @@
 
 ```shell
 hisilicon# mw.b 0x42000000 0xff 0x80000				 /* 对内存初始化*/ 
-hisilicon# tftp 0x42000000 u-boot-hi3559av100.bin	 /* U-boot下载到内存*/ 
+hisilicon# tftp 0x42000000 u-boot-hi3559av100.bin	  /* U-boot下载到内存*/ 
 hisilicon# mmc write 0 0x42000000 0 0x400			 /*从内存写入eMMC*/ 
 
 mmc write 命令说明：
