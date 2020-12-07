@@ -128,24 +128,5 @@ i2c_num:0x0, dev_addr:0x34; reg_addr:0x3046; reg_addr_end:0x3046;               
 0x3046: 0x1
 ```
 
-**telnet安装与使用**
-
-因为在运行例程的时候不能退出界面，退出的话会导致sensor断电，不能进行调试，所以需要配置telnet协议。**telnet**协议是TCP/IP协议族中的一员，是Internet远程登录服务的标准协议和主要方式。 它为用户提供了在本地计算机上完成远程主机工作的能力。 在终端使用者的电脑上使用**telnet**程序，用它连接到服务器。
-
-- 安装
-
-  ```shell
-  sudo apt-get update
-  sudo apt-get install xinetd telnetd
-  //重启机器或网络服务
-  sudo /etc/init.d/xinetd restart
-  ```
-
-- telnet使用
-
-  首先在开发板上输入 `telnetd&`开启telnet服务，然后在服务器上输入`telnet IP`即可远程登录到开发板上
-
-- 登录过程中的密码
-
-  用户名输入**root**，密码为默认直接回车
+**
 
